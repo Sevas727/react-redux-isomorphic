@@ -1,3 +1,9 @@
+/log
+/build
+/node_modules
+bower_components/
+npm-debug.log
+gh-pages/
 */.DS_Store
 .DS_Store
 .DS_Store?
@@ -7,9 +13,9 @@
 Icon?
 ehthumbs.db
 Thumbs.db
-
-node_modules
-npm-debug.log
-book_img
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+*.sublime-workspace
+coverage
 .idea
-!dist

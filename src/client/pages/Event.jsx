@@ -1,19 +1,21 @@
 import React from 'react'
-import { asyncConnect } from 'redux-connect'
-import fetch from 'isomorphic-fetch'
+import {preload} from 'react-isomorphic-render/redux'
+import {connect} from 'react-redux'
 
-@asyncConnect([{
-    key: 'event',
-    promise: ({ params }) => fetch(`http://api.itboost.org:88/app_dev.php/api/event/${params.id}`).then((response) => response.json())
-}])
+@preload(({dispatch, parameters, fetchData})=>fetchData(`/event/${parameters.id}`, 'event')(dispatch))
+@connect((state)=>{
+    return {
+        event: state.fetchData.event
+    }
+})
 export default class Event extends React.Component{
     render(){
-        const response = this.props.event.response
+        const {event, status} = this.props.event
         return (
             <div>
                 Event component ;)<br/>
-
-                <div dangerouslySetInnerHTML={{__html: response.event.description}}></div>
+                <p>{status}</p>
+                <div dangerouslySetInnerHTML={{__html: event.description}}></div>
             </div>
         )
     }
