@@ -2,7 +2,7 @@ import React from 'react'
 import {preload} from 'react-isomorphic-render/redux'
 import {connect} from 'react-redux'
 
-@preload(({dispatch, parameters, fetchData})=>fetchData(`/event/${parameters.id}`, 'event')(dispatch))
+@preload(({dispatch, parameters, fetchData})=>dispatch(fetchData(`/event/${parameters.id}`, 'event')))
 @connect((state)=>{
     return {
         event: state.fetchData.event

@@ -3,7 +3,7 @@ import {Link} from 'react-router'
 import {preload} from 'react-isomorphic-render/redux'
 import {connect} from 'react-redux'
 
-@preload(({dispatch, fetchData})=>fetchData('/events', 'events')(dispatch))
+@preload(({dispatch, fetchData})=>dispatch(fetchData('/events', 'events')))
 @connect((state)=>{
     return {events: state.fetchData.events}
 })
