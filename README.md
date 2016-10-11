@@ -10,4 +10,3 @@
 
 > npm start - for development
 
-> npm run build - build production
