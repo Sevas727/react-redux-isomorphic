@@ -1,4 +1,4 @@
-import cookie from 'react-cookie';
+import cookie from 'react-cookie'
 
 const tokenName = 'token'
 

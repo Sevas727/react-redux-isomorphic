@@ -5,8 +5,7 @@ import '../react-isomorphic-render'
 
 const BASE_URL = 'http://api.itboost.org:88/app_dev.php/api'
 
-const FETCH_DATA = (url, key, {method = 'GET', params, type = null, base_url = BASE_URL} = {}) => {
-
+const Fetcher = (url, method = 'GET', {params, type = null, base_url = BASE_URL} = {}) => {
     let headers_data = {}
     let body = {}
 
@@ -42,9 +41,6 @@ const FETCH_DATA = (url, key, {method = 'GET', params, type = null, base_url = B
     if(Auth.isAuthenticated()){
         headers.append('Authorization', 'Bearer '+Auth.getToken())
     }
-
-
-
     return new Promise((resolve, reject)=>{
         fetch(base_url + url, {
             method: method,
@@ -72,34 +68,33 @@ const FETCH_DATA = (url, key, {method = 'GET', params, type = null, base_url = B
 }
 
 
-export const redux = (url, key, params = {}) => (dispatch) => new Promise((resolve, reject)=>{
+export const redux = (url, key, method = 'GET', params = {}) => async (dispatch) => {
     dispatch({
         type: '@FETCH_DATA/REQUEST',
         payload: {
             key: key
         }
     })
-    FETCH_DATA(url, key, params)
-        .then(data=>{
-            dispatch({
-                type: '@FETCH_DATA/SUCCESS',
-                payload: {
-                    key: key,
-                    response: data.response
-                }
-            })
-            resolve()
+    const {response, error} = await Fetcher(url, method, params)
+    if(response){
+        dispatch({
+            type: '@FETCH_DATA/SUCCESS',
+            payload: {
+                key: key,
+                response: response
+            }
         })
-        .catch(error=>{
-            dispatch({
-                type: '@FETCH_DATA/ERROR',
-                payload:{
-                    key: key,
-                    error: error
-                }
-            })
-            reject()
+    }
+    if(error){
+        dispatch({
+            type: '@FETCH_DATA/ERROR',
+            payload:{
+                key: key,
+                error: error
+            }
         })
-})
+    }
+    return response||error
+}
 
-export const fetchData = FETCH_DATA
+export const fetchData = Fetcher

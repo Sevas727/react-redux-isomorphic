@@ -8,5 +8,5 @@ require('../../assets/styles/style.scss')
 // renders the webpage on the client side
 render({
 	development: _development_, //eslint-disable-line no-undef
-	development_tools: _development_tools_ ? require('./devtools') : false //eslint-disable-line no-undef
+	devtools: _development_tools_ ? require('./devtools') : false //eslint-disable-line no-undef
 },common)

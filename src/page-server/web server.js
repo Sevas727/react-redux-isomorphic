@@ -4,6 +4,9 @@ import { devtools } from 'universal-webpack'
 
 import common from '../client/react-isomorphic-render'
 import Log from '../common/log'
+import {Auth} from '../client/utils/Auth'
+import reactCookie from 'react-cookie'
+import {fetchData} from '../client/utils/apiCall'
 
 const log = Log('webpage renderer')
 
@@ -63,7 +66,23 @@ export default function(parameters)
 						return <script dangerouslySetInnerHTML={{ __html: script }}/>
 					}
 				}
-			}
+			},
+
+			preload: async (http, { request }) => {
+				return {
+					authentication:{
+						user: Auth.isAuthenticated() ? await fetchData('/accounts/', {method: 'GET'}).response: null
+					},
+					navigator:{
+						userAgent: request.headers['user-agent']
+					}
+				}
+			},
+
+			middleware: [async (ctx, next)=>{
+				reactCookie.setRawCookie(ctx.headers.cookie)
+				return await next()
+			}]
 		},
 		common)
 
